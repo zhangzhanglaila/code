@@ -1,0 +1,53 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: trade-prediction-service
+
+# Python 脚本配置
+python:
+  # Python 解释器路径（如果不在 PATH 中，需要指定完整路径）
+  interpreter: D:\programs\Python\Python39\python.exe
+  # 脚本基础路径
+  script:
+    base-path: D:/TradeSpringBoot/python-scripts
+    quantity-train: Trade_Transformer_LSTM_quantity.py
+    price-train: Trade_Transformer_LSTM_price.py
+    api-deploy: app.py
+  
+  # CSV 数据路径配置
+  data:
+    import-data:
+      csv-path: D:/TradeSpringBoot/data/进口/merged_input.csv
+    export-data:
+      csv-path: D:/TradeSpringBoot/data/出口/merged_output.csv
+  
+  # 模型输出路径配置
+  model:
+    import-model:
+      output-path: model/trade_Transformer/in
+    export-model:
+      output-path: model/trade_Transformer/out
+  
+  # Flask 服务自动部署配置
+  flask:
+    enabled: true
+    host: 0.0.0.0
+    port: 5000
+    readiness-path: /health
+    startup-timeout-seconds: 60
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.trade: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/trade-service.log
+
