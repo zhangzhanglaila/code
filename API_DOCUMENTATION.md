@@ -256,6 +256,128 @@ curl http://localhost:8080/api/training/status
 
 **远程上传并替换训练数据文件**。通过此接口可以远程上传新的训练数据文件，替换服务器上现有的 `merged_input.csv` 和/或 `merged_output.csv` 文件，无需手动登录服务器操作。
 
+---
+
+### 5. 上传进口数据到FastGPT
+
+**专用上传接口，用于上传进口CSV数据到FastGPT平台**。
+
+**接口地址**：`POST /api/upload/to-fastgpt/import`
+
+**请求方式**：`POST`
+
+**Content-Type**：`multipart/form-data`
+
+**请求参数**：
+
+| 参数名 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| file | file | 是 | 要上传的进口CSV文件 |
+
+**功能说明**：
+- 专为进口数据设计的上传接口
+- 自动设置数据类型为进口数据
+- 简化上传流程，无需手动配置
+- 固定使用进口数据集ID：68e8cb47a3d85a7f250333cb
+
+**请求示例**（Windows PowerShell）：
+```powershell
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/import `
+  -F "file=@D:/tmp/import_data.csv"
+```
+
+**请求示例**（Linux/Mac）：
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/import \
+  -F "file=@/tmp/import_data.csv"
+```
+
+**响应示例**：
+```json
+{
+  "success": true,
+  "message": "进口数据上传FastGPT成功",
+  "data": {
+    "id": "68e8cb47a3d85a7f250333cb",
+    "name": "进口数据集"
+  }
+}
+```
+
+**错误响应**：
+```json
+{
+  "error": "文件上传失败",
+  "message": "[具体错误信息]"
+}
+```
+
+**HTTP状态码**：
+- `200 OK`：上传成功
+- `400 Bad Request`：参数错误或文件格式不正确
+- `500 Internal Server Error`：服务器内部错误
+
+---
+
+### 6. 上传出口数据到FastGPT
+
+**专用上传接口，用于上传出口CSV数据到FastGPT平台**。
+
+**接口地址**：`POST /api/upload/to-fastgpt/export`
+
+**请求方式**：`POST`
+
+**Content-Type**：`multipart/form-data`
+
+**请求参数**：
+
+| 参数名 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| file | file | 是 | 要上传的出口CSV文件 |
+
+**功能说明**：
+- 专为出口数据设计的上传接口
+- 自动设置数据类型为出口数据
+- 简化上传流程，无需手动配置
+- 固定使用出口数据集ID：68e8ce82a3d85a7f25042962
+
+**请求示例**（Windows PowerShell）：
+```powershell
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/export `
+  -F "file=@D:/tmp/export_data.csv"
+```
+
+**请求示例**（Linux/Mac）：
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/export \
+  -F "file=@/tmp/export_data.csv"
+```
+
+**响应示例**：
+```json
+{
+  "success": true,
+  "message": "出口数据上传FastGPT成功",
+  "data": {
+    "id": "68e8ce82a3d85a7f25042962",
+    "name": "出口数据集"
+  }
+}
+```
+
+**错误响应**：
+```json
+{
+  "error": "文件上传失败",
+  "message": "[具体错误信息]"
+}
+```
+
+**HTTP状态码**：
+- `200 OK`：上传成功
+- `400 Bad Request`：参数错误或文件格式不正确
+- `500 Internal Server Error`：服务器内部错误
+
 **接口地址**：`POST /api/data/upload`
 
 **请求方式**：`POST`

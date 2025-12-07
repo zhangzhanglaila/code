@@ -51,3 +51,12 @@ logging:
   file:
     name: logs/trade-service.log
 
+# FastGPT 配置
+fastgpt:
+  # FastGPT 基础地址
+  baseUrl: http://localhost:3000
+  # FastGPT 认证令牌
+  token: fastgpt-b6mGMG7tJGBKfA166EIhzGUmt0FGG2pXUtFzZplIx6I4w6atr4SWvkdo95J
+  # 文件上传接口路径
+  uploadPath: /api/core/dataset/collection/create/localFile
+

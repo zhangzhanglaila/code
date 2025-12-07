@@ -1,6 +1,6 @@
 # 贸易预测服务 - SpringBoot 后端
 
-基于 SpringBoot 框架开发的贸易预测模型训练和部署管理系统。
+基于 SpringBoot 框架开发的贸易预测模型训练和部署管理系统，包含FastGPT文件上传功能。
 
 ## 项目结构
 
@@ -11,14 +11,20 @@ TradeSpringBoot/
 │       ├── java/com/trade/
 │       │   ├── TradeApplication.java          # 主启动类
 │       │   ├── config/
-│       │   │   └── PythonScriptProperties.java # Python 脚本配置类
+│       │   │   ├── PythonScriptProperties.java # Python 脚本配置类
+│       │   │   ├── FastGPTProperties.java      # FastGPT配置类
+│       │   │   └── RestTemplateConfig.java     # RestTemplate配置类
 │       │   ├── controller/
 │       │   │   ├── TrainingController.java     # 训练任务控制器
-│       │   │   └── DataUploadController.java   # 数据上传控制器
+│       │   │   ├── DataUploadController.java   # 数据上传控制器
+│       │   │   └── FastGPTUploadController.java # FastGPT文件上传控制器
 │       │   ├── service/
 │       │   │   ├── PythonScriptService.java    # Python/Flask 执行服务
 │       │   │   ├── TrainingTaskService.java    # 训练任务管理服务
-│       │   │   └── DataUploadService.java      # CSV 替换服务
+│       │   │   ├── DataUploadService.java      # CSV 替换服务
+│       │   │   └── FileUploadService.java      # FastGPT文件上传服务
+│       │   ├── client/
+│       │   │   └── FastGPTClient.java          # FastGPT客户端
 │       │   ├── model/
 │       │   │   ├── ScriptExecutionResult.java  # 脚本执行结果模型
 │       │   │   └── TrainingTaskStatus.java     # 训练任务状态模型
@@ -42,6 +48,7 @@ TradeSpringBoot/
 4. **远程数据上传**：内置 `/api/data/upload` 接口，可远程替换 `merged_input/output.csv`
 5. **状态跟踪**：实时跟踪训练任务执行状态，支持查询任务进度
 6. **异步执行**：训练任务异步执行，不阻塞主线程
+7. **FastGPT文件上传**：提供 `/api/upload/to-fastgpt/import` 和 `/api/upload/to-fastgpt/export` 接口，支持将CSV数据文件上传到FastGPT平台的指定数据集
 
 ## 环境要求
 
@@ -202,6 +209,53 @@ curl http://localhost:8080/api/training/status
 | --- | --- | --- |
 | `mergedInput` | 新的 `merged_input.csv` 文件 | 否 |
 | `mergedOutput` | 新的 `merged_output.csv` 文件 | 否 |
+
+### 5. 上传进口数据到FastGPT
+
+**接口地址**：`POST /api/upload/to-fastgpt/import`
+
+**请求方式**：`multipart/form-data`
+
+| 字段名 | 说明 | 是否必填 |
+| --- | --- | --- |
+| `file` | 要上传的进口CSV文件 | 是 |
+
+**示例**：
+
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/import ^
+  -F "file=@D:/tmp/import_data.csv"
+```
+
+### 6. 上传出口数据到FastGPT
+
+**接口地址**：`POST /api/upload/to-fastgpt/export`
+
+**请求方式**：`multipart/form-data`
+
+| 字段名 | 说明 | 是否必填 |
+| --- | --- | --- |
+| `file` | 要上传的出口CSV文件 | 是 |
+
+**示例**：
+
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/export ^
+  -F "file=@D:/tmp/export_data.csv"
+```
+
+**响应示例**：
+
+```json
+{
+  "success": true,
+  "message": "文件上传FastGPT成功",
+  "data": {
+    "id": "dataset-collection-12345",
+    "name": "[数据集名称]",
+    "size": 123456
+  }
+}
 
 **示例**：
 

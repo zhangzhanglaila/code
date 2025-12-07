@@ -22,7 +22,7 @@
 
 ### 1. 修改配置文件
 
-编辑 `src/main/resources/application.yml`，修改以下路径：
+编辑 `src/main/resources/application.yml`，修改以下路径和配置：
 
 ```yaml
 python:
@@ -49,6 +49,12 @@ python:
   flask:
     enabled: true
     port: 5000
+
+# FastGPT 配置
+fastgpt:
+  baseUrl: http://localhost:3000
+  token: fastgpt-b6mGMG7tJGBKfA166EIhzGUmt0FGG2pXUtFzZplIx6I4w6atr4SWvkdo95J
+  uploadPath: /api/core/dataset/collection/create/localFile
 ```
 
 ### 2. 准备数据文件
@@ -139,4 +145,20 @@ curl -X POST http://localhost:8080/api/data/upload \
 ```
 
 系统会将文件保存到 `application.yml` 中配置的路径，下次训练会直接使用新数据。
+
+### 5. 上传文件到 FastGPT
+
+#### 进口数据专用接口
+
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/import \
+  -F "file=@你的路径/import_data.csv"
+```
+
+#### 出口数据专用接口
+
+```bash
+curl -X POST http://localhost:8080/api/upload/to-fastgpt/export \
+  -F "file=@你的路径/export_data.csv"
+```
 

@@ -10,16 +10,24 @@ TradeSpringBoot/
 │   │   ├── TradeApplication.java              # SpringBoot 主启动类
 │   │   │
 │   │   ├── config/
-│   │   │   └── PythonScriptProperties.java    # Python 脚本配置属性类
-│   │   │                                       # 从 application.yml 读取配置
+│   │   │   ├── PythonScriptProperties.java    # Python 脚本配置属性类
+│   │   │   │                                   # 从 application.yml 读取配置
+│   │   │   ├── FastGPTProperties.java          # FastGPT 配置属性类
+│   │   │   │                                   # 从 application.yml 读取 FastGPT 配置
+│   │   │   └── RestTemplateConfig.java         # RestTemplate 配置类
+│   │   │                                       # 用于 FastGPT API 调用
 │   │   │
 │   │   ├── controller/
 │   │   │   ├── TrainingController.java        # 训练任务接口
 │   │   │   │                                   # - POST /training/start
 │   │   │   │                                   # - GET  /training/status/{taskId}
 │   │   │   │                                   # - GET  /training/status
-│   │   │   └── DataUploadController.java      # 数据上传接口
-│   │   │                                       # - POST /data/upload
+│   │   │   ├── DataUploadController.java      # 数据上传接口
+│   │   │   │                                   # - POST /data/upload
+│   │   │   └── FastGPTUploadController        # FastGPT 文件上传接口
+│   │   │                                       # - POST /upload/to-fastgpt
+│   │   │                                       # - POST /upload/to-fastgpt/import
+│   │   │                                       # - POST /upload/to-fastgpt/export
 │   │   │
 │   │   ├── service/
 │   │   │   ├── PythonScriptService.java       # Python/Flask 执行服务
@@ -29,8 +37,10 @@ TradeSpringBoot/
 │   │   │   │                                   # - 管理训练任务生命周期
 │   │   │   │                                   # - 按顺序执行训练步骤
 │   │   │   │                                   # - 跟踪任务状态
-│   │   │   └── DataUploadService.java         # 数据文件替换服务
-│   │   │                                       # - 校验 & 写入 merged_input/output.csv
+│   │   │   ├── DataUploadService.java         # 数据文件替换服务
+│   │   │   │                                   # - 校验 & 写入 merged_input/output.csv
+│   │   │   └── FileUploadService.java         # FastGPT 文件上传服务
+│   │   │                                       # - 调用 FastGPT API 上传文件
 │   │   │
 │   │   ├── model/
 │   │   │   ├── ScriptExecutionResult.java     # 脚本执行结果模型
@@ -38,6 +48,11 @@ TradeSpringBoot/
 │   │   │   │
 │   │   │   └── TrainingTaskStatus.java        # 训练任务状态模型
 │   │   │                                       # - 任务ID、总体状态、进度等
+│   │   │
+│   │   ├── client/
+│   │   │   └── FastGPTClient.java             # FastGPT API 客户端
+│   │   │                                       # - 封装 FastGPT API 调用
+│   │   │                                       # - 处理文件上传逻辑
 │   │   │
 │   │   └── enums/
 │   │       └── ScriptStatus.java              # 脚本状态枚举
@@ -48,6 +63,7 @@ TradeSpringBoot/
 │                                               # - Python 脚本路径配置
 │                                               # - CSV 数据路径配置
 │                                               # - 模型输出路径配置
+│                                               # - FastGPT 配置（API地址、令牌等）
 │
 ├── python-scripts/                             # Python 脚本目录
 │   ├── Trade_Transformer_LSTM_price.py        # 单价训练脚本
